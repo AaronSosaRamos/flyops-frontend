@@ -1,15 +1,12 @@
 "use client"
 
-import Footer from "@/components/Footer";
+import Layout from "@/components/Layout";
 import MainScreen from "@/components/MainScreen";
-import Navbar from "@/components/Navbar";
 
 export default function Home() {
   return (
-    <div className="flex flex-col min-h-screen">
-      <Navbar />
+    <Layout>
       <MainScreen />
-      <Footer />
-    </div>
+    </Layout>
   );
 }

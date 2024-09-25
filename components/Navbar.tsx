@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { FaHome, FaRobot, FaEnvelope, FaMoon, FaSun, FaPlane, FaBars } from 'react-icons/fa';
-import { Switch } from '@headlessui/react';
+import { FaHome, FaRobot, FaEnvelope, FaMoon, FaSun, FaPlane, FaBars, FaUserAlt, FaSearch } from 'react-icons/fa';
 
 const Navbar = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -16,15 +15,16 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="w-full bg-blue-500 text-white py-4 px-8 flex justify-between items-center dark:bg-gray-900">
+    <nav className="w-full bg-blue-500 text-white py-4 px-6 flex justify-between items-center dark:bg-gray-900 fixed top-0 left-0 z-50">
       <h1 className="text-2xl font-bold flex items-center space-x-2">
         <FaPlane className="text-white" />
-        <span>Gemini Flight Manager</span>
+        <span>FlyOps</span>
       </h1>
+
       <div className="hidden md:flex space-x-6 text-lg">
         <ul className="flex space-x-6">
           <li className="hover:text-gray-200 transition-colors duration-300">
-            <a href="#home" className="flex items-center space-x-2">
+            <a href="/" className="flex items-center space-x-2">
               <FaHome /> <span>Home</span>
             </a>
           </li>
@@ -34,41 +34,49 @@ const Navbar = () => {
             </a>
           </li>
           <li className="hover:text-gray-200 transition-colors duration-300">
+            <a href="#analyst" className="flex items-center space-x-2">
+              <FaUserAlt /> <span>Analyst</span>
+            </a>
+          </li>
+          <li className="hover:text-gray-200 transition-colors duration-300">
+            <a href="#researcher" className="flex items-center space-x-2">
+              <FaSearch /> <span>Researcher</span>
+            </a>
+          </li>
+          <li className="hover:text-gray-200 transition-colors duration-300">
             <a href="#contact" className="flex items-center space-x-2">
               <FaEnvelope /> <span>Contact Us</span>
             </a>
           </li>
         </ul>
       </div>
-      <div className="flex items-center space-x-4">
-        <FaSun className={`text-2xl ${isDarkMode ? 'hidden' : 'block'} animate-spin-slow`} />
-        <FaMoon className={`text-2xl ${!isDarkMode ? 'hidden' : 'block'} animate-spin-slow`} />
-        <Switch
-          checked={isDarkMode}
-          onChange={toggleDarkMode}
-          className={`${
-            isDarkMode ? 'bg-blue-600' : 'bg-gray-200'
-          } relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-300 ease-in-out`}
-        >
-          <span
-            className={`${
-              isDarkMode ? 'translate-x-6' : 'translate-x-1'
-            } inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-300`}
-          />
-        </Switch>
-      </div>
 
-      <button onClick={toggleMenu} className="md:hidden text-2xl focus:outline-none">
-        <FaBars />
-      </button>
+      <div className="flex items-center space-x-3 md:space-x-4">
+        <button
+          onClick={toggleDarkMode}
+          className="p-2 bg-gray-100 dark:bg-blue-600 rounded-lg text-xl focus:outline-none transition-all duration-300 shadow-md hover:bg-gray-300 dark:hover:bg-blue-700 flex items-center justify-center"
+        >
+          {isDarkMode ? <FaMoon className="text-white" /> : <FaSun className="text-yellow-400" />}
+        </button>
+
+        <button onClick={toggleMenu} className="md:hidden text-2xl focus:outline-none">
+          <FaBars />
+        </button>
+      </div>
 
       {isMenuOpen && (
         <div className="absolute top-16 left-0 w-full bg-blue-500 text-white flex flex-col items-center space-y-4 py-4 md:hidden dark:bg-gray-900">
-          <a href="#home" className="flex items-center space-x-2 hover:text-gray-200 transition-colors duration-300">
+          <a href="/" className="flex items-center space-x-2 hover:text-gray-200 transition-colors duration-300">
             <FaHome /> <span>Home</span>
           </a>
           <a href="#assistant" className="flex items-center space-x-2 hover:text-gray-200 transition-colors duration-300">
             <FaRobot /> <span>Assistant</span>
+          </a>
+          <a href="#analyst" className="flex items-center space-x-2 hover:text-gray-200 transition-colors duration-300">
+            <FaUserAlt /> <span>Analyst</span>
+          </a>
+          <a href="#researcher" className="flex items-center space-x-2 hover:text-gray-200 transition-colors duration-300">
+            <FaSearch /> <span>Researcher</span>
           </a>
           <a href="#contact" className="flex items-center space-x-2 hover:text-gray-200 transition-colors duration-300">
             <FaEnvelope /> <span>Contact Us</span>
