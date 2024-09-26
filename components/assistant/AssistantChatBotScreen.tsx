@@ -1,5 +1,5 @@
 import React, { useState, ChangeEvent } from 'react';
-import { FaRobot, FaPaperPlane, FaFileUpload, FaRocket } from 'react-icons/fa';
+import { FaPaperPlane, FaFileUpload, FaRocket } from 'react-icons/fa';
 
 const ChatBotScreen = () => {
   const [messages, setMessages] = useState([
