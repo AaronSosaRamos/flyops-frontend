@@ -1,7 +1,15 @@
+import { useRouter } from 'next/navigation';
 import React from 'react';
 import { FaPlane, FaArrowRight, FaRobot, FaUserAlt, FaSearch, FaRocket } from 'react-icons/fa';
 
 const MainScreen = () => {
+
+  const router = useRouter();
+
+  const navigateToAnotherPath = (path: string) => {
+    router.push(path);
+  }
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-center pt-20 bg-gradient-to-b from-gray-50 via-gray-100 to-gray-200 text-gray-900 transition-all duration-500 ease-in-out dark:bg-gradient-to-b dark:from-gray-800 dark:via-gray-900 dark:to-black dark:text-white">
       
@@ -29,6 +37,7 @@ const MainScreen = () => {
               Your virtual co-pilot for seamless flight management. 🛫
             </p>
             <button
+              onClick={() => navigateToAnotherPath('/assistant')}
               className="mt-4 px-6 py-2 bg-yellow-500 hover:bg-yellow-600 text-white font-bold rounded-full shadow-md transition-transform duration-300 transform hover:scale-105 dark:bg-yellow-400 dark:hover:bg-yellow-500"
             >
               Get Assistance <FaArrowRight className="inline ml-2" />

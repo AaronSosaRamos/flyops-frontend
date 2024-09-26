@@ -29,22 +29,22 @@ const Navbar = () => {
             </a>
           </li>
           <li className="hover:text-gray-200 transition-colors duration-300">
-            <a href="#assistant" className="flex items-center space-x-2">
+            <a href="/assistant" className="flex items-center space-x-2">
               <FaRobot /> <span>Assistant</span>
             </a>
           </li>
           <li className="hover:text-gray-200 transition-colors duration-300">
-            <a href="#analyst" className="flex items-center space-x-2">
+            <a href="/analyst" className="flex items-center space-x-2">
               <FaUserAlt /> <span>Analyst</span>
             </a>
           </li>
           <li className="hover:text-gray-200 transition-colors duration-300">
-            <a href="#researcher" className="flex items-center space-x-2">
+            <a href="/researcher" className="flex items-center space-x-2">
               <FaSearch /> <span>Researcher</span>
             </a>
           </li>
           <li className="hover:text-gray-200 transition-colors duration-300">
-            <a href="#contact" className="flex items-center space-x-2">
+            <a href="/contact" className="flex items-center space-x-2">
               <FaEnvelope /> <span>Contact Us</span>
             </a>
           </li>
@@ -69,16 +69,16 @@ const Navbar = () => {
           <a href="/" className="flex items-center space-x-2 hover:text-gray-200 transition-colors duration-300">
             <FaHome /> <span>Home</span>
           </a>
-          <a href="#assistant" className="flex items-center space-x-2 hover:text-gray-200 transition-colors duration-300">
+          <a href="/assistant" className="flex items-center space-x-2 hover:text-gray-200 transition-colors duration-300">
             <FaRobot /> <span>Assistant</span>
           </a>
-          <a href="#analyst" className="flex items-center space-x-2 hover:text-gray-200 transition-colors duration-300">
+          <a href="/analyst" className="flex items-center space-x-2 hover:text-gray-200 transition-colors duration-300">
             <FaUserAlt /> <span>Analyst</span>
           </a>
-          <a href="#researcher" className="flex items-center space-x-2 hover:text-gray-200 transition-colors duration-300">
+          <a href="/researcher" className="flex items-center space-x-2 hover:text-gray-200 transition-colors duration-300">
             <FaSearch /> <span>Researcher</span>
           </a>
-          <a href="#contact" className="flex items-center space-x-2 hover:text-gray-200 transition-colors duration-300">
+          <a href="/contact" className="flex items-center space-x-2 hover:text-gray-200 transition-colors duration-300">
             <FaEnvelope /> <span>Contact Us</span>
           </a>
         </div>
