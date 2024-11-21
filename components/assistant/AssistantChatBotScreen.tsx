@@ -1,70 +1,124 @@
-import React, { useState } from 'react';
+import axiosInstance from '@/utils/axiosInstance';
+import React, { useState, useRef, useEffect, KeyboardEvent } from 'react';
 import { FaPaperPlane, FaRocket } from 'react-icons/fa';
+import ReactMarkdown from 'react-markdown';
 
-const ChatBotScreen = () => {
-  const [messages, setMessages] = useState([
-    { sender: 'bot', text: 'Hello! I’m FlyBot, your virtual assistant. How can I assist you with your flights today? ✈️' },
+interface Message {
+  sender: 'bot' | 'user';
+  text: string;
+}
+
+const ChatBotScreen: React.FC = () => {
+  const [messages, setMessages] = useState<Message[]>([
+    { sender: 'bot', text: 'Hello! I’m **FlyBot**, your virtual assistant. How can I assist you with your flights today? ✈️' },
   ]);
-  const [input, setInput] = useState('');
-  const [isTyping, setIsTyping] = useState(false);
+  const [input, setInput] = useState<string>('');
+  const [isTyping, setIsTyping] = useState<boolean>(false);
+  const chatBoxRef = useRef<HTMLDivElement>(null);
 
   const handleSendMessage = async () => {
     if (input.trim()) {
-      setMessages([...messages, { sender: 'user', text: input }]);
+      const newUserMessage: Message = { sender: 'user', text: input };
+      setMessages((prev) => [...prev, newUserMessage]);
       setInput('');
       setIsTyping(true);
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      setMessages((prev) => [
-        ...prev,
-        { sender: 'bot', text: 'Your request has been processed. How else can I help you? 🌍' },
-      ]);
-      setIsTyping(false);
+
+      try {
+        const response = await axiosInstance.post('/flyops-assistant', {
+          query: input,
+        });
+
+        const botReply: Message = {
+          sender: 'bot',
+          text: response.data || 'Sorry, I couldn’t process your request. Please try again. 🌍',
+        };
+
+        setMessages((prev) => [...prev, botReply]);
+      } catch (error) {
+        const errorReply: Message = {
+          sender: 'bot',
+          text: 'An error occurred while processing your request. Please try again later. ⚠️',
+        };
+
+        setMessages((prev) => [...prev, errorReply]);
+      } finally {
+        setIsTyping(false);
+      }
     }
   };
 
+  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter' && !isTyping) {
+      event.preventDefault();
+      handleSendMessage();
+    }
+  };
+
+  useEffect(() => {
+    if (chatBoxRef.current) {
+      chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
+    }
+  }, [messages]);
+
   return (
-    <div className="min-h-screen pt-20 pb-10 bg-gradient-to-b from-indigo-100 via-pink-100 to-yellow-100 dark:bg-gradient-to-b dark:from-gray-900 dark:via-gray-850 dark:to-black text-gray-900 dark:text-gray-200 flex flex-col items-center justify-between transition-all duration-500 ease-in-out">
-      <header className="w-full text-center py-4 z-10">
-        <h1 className="text-3xl font-bold flex items-center justify-center sm:text-4xl md:text-5xl">
-          <FaRocket className="text-yellow-500 mr-2 animate-bounce" /> FlyOps Assistant
+    <div className="min-h-screen flex flex-col items-center justify-between mt-[60px] bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-200 transition-all duration-500">
+      <header className="w-full text-center py-4">
+        <h1 className="text-3xl sm:text-4xl font-bold flex items-center justify-center text-blue-600 dark:text-blue-400">
+          <FaRocket className="mr-2" /> FlyOps Assistant
         </h1>
-        <p className="text-md sm:text-lg md:text-xl text-gray-600 dark:text-gray-400">
-          Let me help you manage your flights efficiently.
+        <p className="text-base sm:text-lg text-gray-600 dark:text-gray-400">
+          Helping you manage your flights efficiently.
         </p>
       </header>
-
-      <div className="flex flex-col w-full max-w-3xl bg-gradient-to-br from-white via-purple-100 to-blue-50 dark:from-gray-800 dark:via-gray-850 dark:to-black shadow-lg rounded-lg overflow-hidden h-96 flex-grow z-10 transition-transform duration-500">
-        <div className="flex-1 p-2 sm:p-4 overflow-y-auto">
+      <div className="flex flex-col w-full max-w-3xl bg-white dark:bg-gray-800 shadow-md rounded-lg overflow-hidden h-96 flex-grow">
+        <div
+          ref={chatBoxRef}
+          className="flex-1 p-4 overflow-y-auto scroll-smooth"
+        >
           {messages.map((message, index) => (
-            <div key={index} className={`flex ${message.sender === 'bot' ? 'justify-start' : 'justify-end'} mb-2 animate-fadeInUp`}>
-              <div className={`max-w-[80%] sm:max-w-xs px-3 py-2 sm:px-4 sm:py-3 rounded-tl-none rounded-3xl ${
-                  message.sender === 'bot' ? 'bg-gradient-to-r from-blue-400 to-blue-600 text-white dark:from-blue-500 dark:to-blue-700' 
-                  : 'bg-gradient-to-r from-pink-400 to-pink-600 text-white dark:from-yellow-600 dark:to-yellow-800'
-                } shadow-md transition-transform duration-300 transform hover:scale-105`}>
-                {message.text}
+            <div
+              key={index}
+              className={`flex ${message.sender === 'bot' ? 'justify-start' : 'justify-end'} mb-4`}
+            >
+              <div
+                className={`w-auto max-w-[75%] break-words px-4 py-3 rounded-lg shadow ${
+                  message.sender === 'bot'
+                    ? 'bg-blue-100 text-gray-800 dark:bg-blue-700 dark:text-white'
+                    : 'bg-green-100 text-gray-800 dark:bg-green-700 dark:text-white'
+                }`}
+              >
+                <ReactMarkdown>{message.text}</ReactMarkdown>
               </div>
             </div>
           ))}
           {isTyping && (
-            <div className="flex justify-start mb-2">
-              <div className="max-w-[80%] sm:max-w-xs px-3 py-2 sm:px-4 sm:py-3 bg-gradient-to-r from-blue-400 to-blue-600 text-white dark:from-blue-500 dark:to-blue-700 rounded-tl-none rounded-3xl shadow-md transition-transform duration-300 transform hover:scale-105">
-                <span className="dot-pulse">• • •</span>
+            <div className="flex justify-start mb-4">
+              <div className="bg-blue-100 dark:bg-blue-700 text-gray-800 dark:text-white rounded-lg px-4 py-3">
+                <div className="flex space-x-1">
+                  <span className="w-2 h-2 bg-gray-800 dark:bg-white rounded-full animate-bounce"></span>
+                  <span className="w-2 h-2 bg-gray-800 dark:bg-white rounded-full animate-bounce delay-150"></span>
+                  <span className="w-2 h-2 bg-gray-800 dark:bg-white rounded-full animate-bounce delay-300"></span>
+                </div>
               </div>
             </div>
           )}
         </div>
       </div>
-
-      <div className="flex items-center w-full max-w-3xl bg-gradient-to-r from-indigo-100 via-pink-200 to-yellow-200 dark:from-gray-800 dark:via-gray-700 dark:to-gray-900 p-2 sm:p-3 rounded-lg shadow-md mt-4 z-20 relative">
+      <div className="flex items-center w-full max-w-3xl bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md mt-4">
         <input
-          className="flex-1 bg-pink-100 dark:bg-gray-700 text-gray-900 dark:text-gray-300 rounded-lg px-3 sm:px-4 py-2 sm:py-2 mx-2 sm:mx-3 focus:outline-none transition-colors duration-300"
+          className="flex-1 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-200 rounded-lg px-4 py-2 focus:outline-none transition-all duration-300"
           type="text"
           placeholder="Type your message..."
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          disabled={isTyping} 
+          onKeyDown={handleKeyDown}
+          disabled={isTyping}
         />
-        <button className="bg-blue-500 hover:bg-blue-600 text-white rounded-lg px-3 sm:px-4 py-2 sm:py-2 transition-transform duration-300 transform hover:scale-105 focus:outline-none flex items-center" onClick={handleSendMessage} disabled={isTyping}>
+        <button
+          className="ml-4 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md transition-transform transform hover:scale-105 focus:outline-none flex items-center"
+          onClick={handleSendMessage}
+          disabled={isTyping}
+        >
           Send <FaPaperPlane className="ml-2" />
         </button>
       </div>
