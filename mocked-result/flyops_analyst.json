@@ -1,0 +1,82 @@
+{
+  "recommended_flights": [
+    {
+      "airline": "Blade",
+      "flight_number": "BLA123",
+      "departure_time": "2024-11-21T08:00:00",
+      "arrival_time": "2024-11-21T08:30:00",
+      "duration": "30 minutes",
+      "price": 350,
+      "stops": 0,
+      "layover_cities": [],
+      "aircraft_type": "Helicopter",
+      "seat_class": "Economy",
+      "amenities": [
+        "Wi-Fi",
+        "In-flight refreshments"
+      ],
+      "booking_link": "https://www.blade.com/book"
+    },
+    {
+      "airline": "Regional Air",
+      "flight_number": "RA456",
+      "departure_time": "2024-11-21T09:00:00",
+      "arrival_time": "2024-11-21T09:45:00",
+      "duration": "45 minutes",
+      "price": 230,
+      "stops": 0,
+      "layover_cities": [],
+      "aircraft_type": "Regional Jet",
+      "seat_class": "Economy",
+      "amenities": [
+        "In-flight refreshments"
+      ],
+      "booking_link": "https://www.regionalair.com/book"
+    }
+  ],
+  "total_cost_savings": 2070,
+  "cost_breakdown": {
+    "Helicopter Service": 350,
+    "Regional Flight": 230,
+    "Charter Flight": 2300
+  },
+  "alternative_routes": [
+    {
+      "airline": "Nearby Air",
+      "flight_number": "NA789",
+      "departure_time": "2024-11-21T10:00:00",
+      "arrival_time": "2024-11-21T10:50:00",
+      "duration": "50 minutes",
+      "price": 250,
+      "stops": 0,
+      "layover_cities": [],
+      "aircraft_type": "Turboprop",
+      "seat_class": "Economy",
+      "amenities": [
+        "Wi-Fi"
+      ],
+      "booking_link": "https://www.nearbyair.com/book"
+    }
+  ],
+  "analysis_details": {
+    "criteria": "Cost efficiency, travel time, and convenience",
+    "methods": "Comparison of average costs, potential savings, and alternative options"
+  },
+  "recommendations": [
+    "Consider booking a regional flight for significant cost savings.",
+    "Book in advance to secure the best rates.",
+    "Use flight comparison tools to find the best deals."
+  ],
+  "potential_challenges": [
+    "Limited availability of helicopter services.",
+    "Potential for price increases as the departure date approaches."
+  ],
+  "additional_notes": "Consider travel insurance to protect against unforeseen changes.",
+  "resources": [
+    "https://www.google.com/flights",
+    "https://www.kayak.com",
+    "https://www.expedia.com"
+  ],
+  "contact_information": "For further assistance, contact our travel support at support@travelagency.com",
+  "legal_disclaimer": "Prices and availability are subject to change. Please verify all details before booking."
+}
