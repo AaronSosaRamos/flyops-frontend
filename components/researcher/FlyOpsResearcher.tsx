@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { FaCalendarAlt, FaChartLine, FaDatabase } from 'react-icons/fa';
+import axiosInstance from '@/utils/axiosInstance';
+import FlyOpsResearcherResult from './ResearcherResult';
 
 interface ResearchFormData {
   date_range_start: string;
@@ -31,24 +33,38 @@ const FlyOpsResearcherForm = () => {
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = (data: ResearchFormData) => {
-    toast.success('Research analysis data submitted successfully!');
-    console.log('Form Data:', {
+  const [researchData, setResearchData] = useState<any | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  const onSubmit = async (data: ResearchFormData) => {
+    setLoading(true);
+    toast.info('Submitting research request...');
+    const formattedData = {
       ...data,
-      data_sources: data.data_sources.split(',').map(source => source.trim()),
-    });
+      data_sources: data.data_sources.split(',').map((source) => source.trim()),
+    };
+
+    try {
+      const response = await axiosInstance.post('/flyops-researcher', formattedData);
+      setResearchData(response.data);
+      toast.success('Research completed successfully!');
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || 'Failed to process the research request.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-200 dark:bg-gray-800 p-6 mt-12">
+    <div className="min-h-screen flex flex-col items-center bg-gray-200 dark:bg-gray-800 p-6 mt-12">
       <ToastContainer position="top-center" autoClose={3000} hideProgressBar={false} newestOnTop closeOnClick pauseOnHover />
-      
+
       <div className="w-full max-w-xl bg-gray-50 dark:bg-gray-900 shadow-xl rounded-2xl p-10">
         <h2 className="text-3xl font-semibold text-center text-gray-800 dark:text-gray-100 mb-4">FlyOps Researcher</h2>
         <p className="text-center text-gray-500 dark:text-gray-400 mb-10">
           Submit your analysis parameters to conduct focused research on specific areas of flight operations.
         </p>
-        
+
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <div className="relative">
             <label className="block text-gray-700 dark:text-gray-200 mb-1 font-medium">Start Date</label>
@@ -106,12 +122,22 @@ const FlyOpsResearcherForm = () => {
 
           <button
             type="submit"
-            className="w-full bg-green-500 text-white py-3 rounded-lg font-semibold hover:bg-green-600 transition-colors duration-200 shadow-lg"
+            disabled={loading}
+            className={`w-full py-3 rounded-lg font-semibold transition-colors duration-200 shadow-lg ${
+              loading ? 'bg-gray-400 cursor-not-allowed text-white' : 'bg-green-500 hover:bg-green-600 text-white'
+            }`}
           >
-            Submit Research Data
+            {loading ? 'Processing...' : 'Submit Research Data'}
           </button>
         </form>
       </div>
+
+      {researchData && (
+        <div className="w-full max-w-3xl bg-gray-100 dark:bg-gray-700 shadow-md rounded-lg mt-10 p-6">
+          <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-4">Research Data</h3>
+          <FlyOpsResearcherResult data={researchData} />
+        </div>
+      )}
     </div>
   );
 };
